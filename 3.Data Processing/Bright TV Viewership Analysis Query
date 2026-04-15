@@ -1,0 +1,120 @@
+ -- checking the datasets --
+select * 
+from `workspace`.`default`.`bright_tv_dataset_viewership` limit 100;
+
+select * 
+from `workspace`.`default`.`bright_tv_dataset_user_profiles` limit 100;
+
+-- joining viewership and user profile tables--
+select A.UserID,
+       A.Channel2,
+       A.RecordDate2,
+       A.`Duration 2`,
+       B.Name,
+       B.Surname,
+       B.Email,
+       B.Gender,
+       B.Race,
+       B.Age,
+       B.Province,
+       B.`Social Media Handle`
+from `workspace`.`default`.`bright_tv_dataset_viewership` AS A
+INNER JOIN `workspace`.`default`.`bright_tv_dataset_user_profiles` AS B
+on A.UserID = B.UserID;
+
+-- checking date range (3 months dataset)-- 
+select Min(RecordDate2) AS Start_date,
+       Max(RecordDate2) AS Latest_date
+from `workspace`.`default`.`bright_tv_dataset_viewership` AS A
+INNER JOIN `workspace`.`default`.`bright_tv_dataset_user_profiles` AS B
+on A.UserID = B.UserID;
+
+-- checking how many subscribers we have (10000 subscribers)--
+select COUNT(A.UserID)
+from `workspace`.`default`.`bright_tv_dataset_viewership` AS A
+INNER JOIN `workspace`.`default`.`bright_tv_dataset_user_profiles` AS B
+on A.UserID = B.UserID;
+
+-- checking the number of channels consumed by subscribers (21 channels) --
+select distinct Channel2 
+from `workspace`.`default`.`bright_tv_dataset_viewership` AS A
+INNER JOIN `workspace`.`default`.`bright_tv_dataset_user_profiles` AS B
+on A.UserID = B.UserID;
+
+-- most popular/less popular channel --
+select MIN(Channel2) AS most_popular_channel,
+       MAX(Channel2) AS least_popular_channel
+from `workspace`.`default`.`bright_tv_dataset_viewership` AS A
+INNER JOIN `workspace`.`default`.`bright_tv_dataset_user_profiles` AS B
+on A.UserID = B.UserID;
+
+--Grouping subscribers by gender (262 subscriber's genders not disclosed)--
+select COUNT(A.UserID) AS total_number_of_subscribers,
+       B.Gender
+from `workspace`.`default`.`bright_tv_dataset_viewership` AS A
+INNER JOIN `workspace`.`default`.`bright_tv_dataset_user_profiles` AS B
+on A.UserID = B.UserID
+Group by B.Gender;
+
+-- Grouping subscribers by race (3 groups do not fall under a specific Race)--
+select COUNT(A.UserID) AS total_number_of_subscribers,
+       B.Race
+from `workspace`.`default`.`bright_tv_dataset_viewership` AS A
+INNER JOIN `workspace`.`default`.`bright_tv_dataset_user_profiles` AS B
+on A.UserID = B.UserID
+Group by B.Race;
+
+-- checking for nulls --
+select*
+from `workspace`.`default`.`bright_tv_dataset_viewership` AS A
+INNER JOIN `workspace`.`default`.`bright_tv_dataset_user_profiles` AS B
+on A.UserID = B.UserID
+where B.Age is NULL;
+
+
+-- The Big Query --
+select A.UserID,
+       A.Channel2,
+       A.RecordDate2,
+       A.`Duration 2`,
+       B.Name,
+       B.Surname,
+       B.Gender,
+       B.Race,
+       B.Age,
+       B.Province,
+
+       -- Converting time from UTC to South African time --
+        from_utc_timestamp(try_to_timestamp(A.RecordDate2, 'dd/MM/yyyy HH:mm'), 'Africa/Johannesburg') AS SA_Time,
+       hour(from_utc_timestamp(try_to_timestamp(A.RecordDate2, 'dd/MM/yyyy HH:mm'), 'Africa/Johannesburg')) AS SA_Hour,
+
+       -- adding columns to enhance the table for better insights-- 
+       dayname(to_timestamp(A.RecordDate2, 'dd/MM/yyyy HH:mm')) AS Day_name,
+       monthname(to_timestamp(A.RecordDate2, 'dd/MM/yyyy HH:mm')) AS Month_name,
+       dayofmonth(to_timestamp(A.RecordDate2, 'dd/MM/yyyy HH:mm')) AS Date_of_month,
+
+       -- determining weekday/weekend --
+       CASE 
+           WHEN dayname(to_timestamp(A.RecordDate2, 'dd/MM/yyyy HH:mm')) IN ('Sun','Sat') THEN 'weekend'
+           ELSE 'weekday'
+       END AS Day_classification,
+
+       -- Watch buckets --
+       CASE 
+           WHEN hour(from_utc_timestamp(try_to_timestamp(A.RecordDate2, 'dd/MM/yyyy HH:mm'), 'Africa/Johannesburg')) BETWEEN 0 AND 5 THEN '01.Early Morning'
+           WHEN hour(from_utc_timestamp(try_to_timestamp(A.RecordDate2, 'dd/MM/yyyy HH:mm'), 'Africa/Johannesburg')) BETWEEN 6 AND 11 THEN '02.Mid Morning'
+           WHEN hour(from_utc_timestamp(try_to_timestamp(A.RecordDate2, 'dd/MM/yyyy HH:mm'), 'Africa/Johannesburg')) BETWEEN 12 AND 16 THEN '03.Afternoon'
+           WHEN hour(from_utc_timestamp(try_to_timestamp(A.RecordDate2, 'dd/MM/yyyy HH:mm'), 'Africa/Johannesburg')) BETWEEN 17 AND 20 THEN '04.Evening'
+           ELSE '05.Night'
+       END AS Watch_Buckets,
+
+       -- Duration buckets --
+       CASE 
+           WHEN hour(from_utc_timestamp(try_to_timestamp(A.`Duration 2`, 'dd/MM/yyyy HH:mm'), 'Africa/Johannesburg')) BETWEEN 0 AND 3 THEN '01.Casual Watch'
+           WHEN hour(from_utc_timestamp(try_to_timestamp(A.`Duration 2`, 'dd/MM/yyyy HH:mm'), 'Africa/Johannesburg')) BETWEEN 4 AND 7 THEN '02.Hooked'
+           WHEN hour(from_utc_timestamp(try_to_timestamp(A.`Duration 2`, 'dd/MM/yyyy HH:mm'), 'Africa/Johannesburg')) BETWEEN 8 AND 10 THEN '03.Mini Binge'
+           ELSE '04.Binge Watch'
+       END AS Duration_Buckets
+from `workspace`.`default`.`bright_tv_dataset_viewership` AS A
+LEFT JOIN `workspace`.`default`.`bright_tv_dataset_user_profiles` AS B
+on A.UserID = B.UserID;

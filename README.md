@@ -1,39 +1,38 @@
 # Bright-TV-Case-Study
-Analysis of BrightTV viewership and datasets to help the CEO and his team grow the viewership for this financial year
+Analysis of BrightTV viewership and user profile datasets to help the CEO and his team grow the viewership for this financial year.
 
 ### Problem scenario
-BrightTV ‘s CEO has an objective to grow the company’s subscription base for this financial year. He has approached yme to provide insights that would assist CVM (Customer Value Management) team in meeting this year’s objective.
 
-
-
-
-
-# Bright-Coffee-Shop-Sales-Analysis
-Conducting sales analysis for the CEO to understand the performance of the shop in the last 6 months
-
-### Problem Statement
-
-The coffee shop has been underperforming in the last 6 months. This project focuses on performing diagnostic analysis to identify the possible causes of the decline in revenue and provide data-driven insights to support business decision-making.
+BrightTV aims to increase its subscription base during the current financial year. The CEO has requested analytical insights to
+support the Customer Value Management (CVM) team in understanding viewer behaviour, identifying consumption trends, and developing
+strategies to improve user engagement and platform growth.
 
 ### Aim of the project
-The aim of this project is to provide analysis with key insights regarding the revenue decline experienced by the coffee shop and provide recommendations that can help increase revenue and improve product performance.
+
+The aim of this project is to analyze BrightTV user and viewership data in order to generate insights that can help increase platform consumption and grow the subscriber base.
 
 ### Objectives
-The following steps were taken to execute the project:
 
+The following steps were taken to execute the project:
 - Brainstorming ideas using a Miro board
-- Project planning using a Canva gannt chart
+- Project planning using a Canva Gantt Chart
 - Data processing and analysis using SQL on Databricks
+- Converting UTC timestamps to South African Standard Time (SAST)
+- Analyzing user consumption and session trends
 - Creating Pivot Tables and Charts using Microsoft Excel
-- Created an analysis presentation using Canva
-- Dashboard creation and visualization on Data Studio
+- Creating an analysis presentation using Canva
+- Dashboard creation and visualization using Looker Studio
 
 ### Summary of results
 
-- The analysis shows that sales in the coffee store are generally lower during warmer seasons compared to winter periods.
-- An increase in sales was observed as winter approached, indicating that seasonal weather patterns significantly influence customer purchasing behaviour.
-- Additionally, products are mostly purchased at the beginning of the month compared to month-end periods, which could be linked to reduced customer spending power during what is commonly referred to as "Mampara Week".
-- The analysis also identified high-performing product categories and revenue trends across time intervals
+The analysis revealed several important insights regarding user behaviour and content consumption on BrightTV.
+- User consumption varies significantly depending on the day and time.
+- Certain content categories attract higher engagement and longer viewing sessions.
+- Low-consumption periods were identified during specific weekdays and off-peak hours.
+- Viewer activity increases during evening periods and weekends.
+- Some subscriber groups show higher platform engagement than others.
+- Content preferences play a major role in influencing user consumption behaviour.
+- Opportunities for improving engagement through targeted content recommendations and customer retention initiatives.
 
 ### Tools used in the case study
 
@@ -46,31 +45,3 @@ The following steps were taken to execute the project:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Steps taken and tools used to analyse the datasets given
-1. Using Miro to create a chart that shows where the data comes from, how it is processed, where it is stored as well as how it is analysed and presented.
-2. Using Canva to crate a Gannt chart that basically outlines the timelines of the tasks taken to complete the analysis (appears on the Miro board as well}
-3. Using databricks to join the viewership and user profile tables as well as write SQL quries to analyse the datasets given and export it to Excel
-5. Using the exported data from Databricks to create pivot tables and charts
-6. Finally, using Canva to create a presentation highlighting key insights and recommendations that will help the CEO and his team chieve their goal.
-
-# Findings
-1. I found that males dominate when it comes to viewership with 88%, females barely watch and a couple of people did not disclose their gender.
-2. Gauteng and KZN are leading top of viewerhip overall, this could be because both provinces have a the highest populations compared to the rest of the provinces.
-3. Sports channels have the most views followed by music and entertainment then news and kids channels have the lowest viewers
-4. Daily viewership breakdown shows that afternoon has the highest views followed by evening.
-5. Weekly engagement shows that Monday has the lowest views while Wednesday and friday's view are at the top
